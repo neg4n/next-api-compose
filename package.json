@@ -1,6 +1,6 @@
 {
   "name": "next-api-compose",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Compose middleware chain in Next.js API Routes",
   "author": {
     "name": "Igor Klepacki",
