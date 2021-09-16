@@ -56,88 +56,19 @@ export default compose([withBar, withFoo, withHelmet], (request, response) => {
 
 _in this example, popular middleware [helmet][helmet] is converted using utility function from `next-api-compose` and passed as one element in middleware chain_
 
-## Advanced usage:
+## Examples
 
-```js
-import { compose } from 'next-api-compose'
+You can find more examples here:
 
-export default compose(
-  { sharedErrorHandler, middlewareChain: [withBar, withFoo, withError] },
-  (request, response) => { // This is unreachable because   ^^^^^^^^^ will return 418 status.
-    const { foo, bar } = request
-    response.status(200).json({ foo, bar })
-  }
-)
+* JavaScript
+  * [Basic usage with error handling][basic-error-handling]
+  * [Basic usage with Connect/Express middleware][basic-express-middleware]
+* TypeScript
+  * [Basic usage with TypeScript][basic-typescript]
+  * [Advanced & complete usage with TypeScript][advanced-typescript-complete]
 
-async function sharedErrorHandler(error, _request, response) {
-  response.status(418).json({ error: error.message })
-}
 
-function withFoo(handler) {
-  return async function (request, response) {
-    request.foo = 'foo'
-    return handler(request, response)
-  }
-}
-
-function withBar(handler) {
-  return async function (request, response) {
-    request.bar = 'bar'
-    return handler(request, response)
-  }
-}
-
-function withError() {
-  return async function () {
-    throw new Error('some error')
-  }
-}
-```
-
-## TypeScript
-
-```ts
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type {
-  ExtendedNextApiHandler,
-  NextApiComposeMiddlewares,
-  NextApiComposeOptions
-} from 'next-api-compose'
-import { compose } from 'next-api-compose'
-
-type NextApiRequestWithFoo = NextApiRequest & Partial<{ foo: string }>
-type NextApiRequestWithBar = NextApiRequest & Partial<{ bar: string }>
-type NextApiRequestWithFooBar = NextApiRequestWithFoo & NextApiRequestWithBar
-
-const mws: NextApiComposeMiddlewares<NextApiRequestWithFooBar> = [withFoo, withBar]
-const options: NextApiComposeOptions<NextApiRequestWithFooBar> = {
-  sharedErrorHandler: handleErrors,
-  middlewareChain: mws
-}
-
-export default compose<NextApiRequestWithFooBar>(options, (request, response) => {
-  const { foo, bar } = request
-  response.status(200).json({ foo, bar })
-})
-
-function handleErrors(error: Error, _request: NextApiRequest, response: NextApiResponse) {
-  response.status(418).json({ error: error.message })
-}
-
-function withFoo(handler: ExtendedNextApiHandler<NextApiRequestWithFoo>) {
-  return async function (request: NextApiRequestWithFoo, response: NextApiResponse) {
-    request.foo = 'foo'
-    return handler(request, response)
-  }
-}
-
-function withBar(handler: ExtendedNextApiHandler<NextApiRequestWithBar>) {
-  return async function (request: NextApiRequestWithBar, response: NextApiResponse) {
-    request.bar = 'bar'
-    return handler(request, response)
-  }
-}
-```
+*the `example/` directory contains simple [Next.js][next-homepage] application implementing `next-api-compose` . To fully explore examples implemented in it by yourself - simply do `cd examples && npm i && npm run dev` then navigate to http://localhost:3000/*
 
 ## Caveats
 
@@ -155,7 +86,7 @@ function withBar(handler: ExtendedNextApiHandler<NextApiRequestWithBar>) {
     about stalled API requests.  
     Discussion about this can be found [on the Next.js GitHub repository page][next-stalled-requests-discussion].
 
-2.  If you are using TypeScript and strict types *(no `any` at all)*, you may want to use [Partial][typescript-partial]
+2.  If you are using TypeScript and strict types _(no `any` at all)_, you may want to use [Partial][typescript-partial]
 
     ```ts
     type NextApiRequestWithFoo = NextApiRequest & Partial<{ foo: string }>
@@ -178,3 +109,8 @@ All contributions are welcome.
 [next-extending-api-parameters]: https://nextjs.org/docs/api-routes/api-middlewares#extending-the-reqres-objects-with-typescript
 [next-api-routes-config]: https://nextjs.org/docs/api-routes/api-middlewares#custom-config
 [next-api-routes]: https://nextjs.org/docs/api-routes/introduction
+
+[basic-error-handling]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/basic-error-handling.js
+[basic-express-middleware]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/basic-express-middleware.js
+[basic-typescript]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/basic-typescript.ts
+[advanced-typescript-complete]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/advanced-typescript-complete.ts
