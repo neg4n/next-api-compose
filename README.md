@@ -139,6 +139,30 @@ function withBar(handler: ExtendedNextApiHandler<NextApiRequestWithBar>) {
 }
 ```
 
+## Caveats
+
+1.  You may need to add
+
+    ```js
+    export const config = {
+      api: {
+        externalResolver: true
+      }
+    }
+    ```
+
+    to your [Next.js API route configuration][next-api-routes-config] in order to dismiss false positive
+    about stalled API requests.  
+    Discussion about this can be found [on the Next.js GitHub repository page][next-stalled-requests-discussion].
+
+2.  If you are using TypeScript and strict types *(no `any` at all)*, you may want to use [Partial][typescript-partial]
+
+    ```ts
+    type NextApiRequestWithFoo = NextApiRequest & Partial<{ foo: string }>
+    ```
+
+    when extending [API Route parameters' objects][next-extending-api-parameters] to avoid type errors during usage of `compose`.
+
 ## License
 
 This project is licensed under the MIT license.  
@@ -148,5 +172,9 @@ All contributions are welcome.
 [connect]: https://github.com/senchalabs/connect
 [express]: https://expressjs.com
 [next-homepage]: https://nextjs.org/
+[next-stalled-requests-discussion]: https://github.com/vercel/next.js/issues/10439#issuecomment-583214126
+[typescript-partial]: https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype
 [next-connect]: https://github.com/hoangvvo/next-connect
+[next-extending-api-parameters]: https://nextjs.org/docs/api-routes/api-middlewares#extending-the-reqres-objects-with-typescript
+[next-api-routes-config]: https://nextjs.org/docs/api-routes/api-middlewares#custom-config
 [next-api-routes]: https://nextjs.org/docs/api-routes/introduction
