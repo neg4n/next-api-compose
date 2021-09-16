@@ -6,7 +6,7 @@ This library provides simple yet complete higher order function
 with responsibility of composing multiple middleware functions into one [Next.js API route][next-api-routes] handler.
 
 The library **does not** contain routing utilities. I believe mechanism built in  
-[Next.js][next-homepage] itself or [next-connect][next-connect] library are pretty enough solutions.
+[Next.js][next-homepage] itself or [next-connect][next-connect] library are sufficient solutions.
 
 ## Features
 
