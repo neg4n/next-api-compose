@@ -2,23 +2,40 @@ import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
 import type { IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
 
 export type ExtendableNextApiRequest<T> = T extends NextApiRequest ? T : NextApiRequest
+export type ExtendableNextApiResponse<T, DataType = any> = T extends NextApiResponse
+  ? T
+  : NextApiResponse<DataType>
 
-export type ExtendedNextApiHandler<T, H = any> = (
-  request: ExtendableNextApiRequest<T>,
-  response: NextApiResponse<H>
+export type ExtendedNextApiHandler<
+  RequestType,
+  ResponseType = NextApiResponse,
+  DataType = any
+> = (
+  request: ExtendableNextApiRequest<RequestType>,
+  response: ExtendableNextApiResponse<ResponseType, DataType>
 ) => void | Promise<void>
 
-export type NextApiComposeMiddlewares<T> = Array<
-  (handler: ExtendedNextApiHandler<T>) => ExtendedNextApiHandler<T>
+export type NextApiComposeMiddlewares<
+  RequestType,
+  ResponseType = NextApiResponse,
+  DataType = any
+> = Array<
+  (
+    handler: ExtendedNextApiHandler<RequestType, ResponseType, DataType>
+  ) => ExtendedNextApiHandler<RequestType, ResponseType, DataType>
 >
 
-export type NextApiComposeOptions<T> = {
+export type NextApiComposeOptions<
+  RequestType,
+  ResponseType = NextApiResponse,
+  DataType = any
+> = {
   sharedErrorHandler: (
     error: Error,
     request: NextApiRequest,
     response: NextApiResponse
   ) => void | Promise<void>
-  middlewareChain: NextApiComposeMiddlewares<T>
+  middlewareChain: NextApiComposeMiddlewares<RequestType, ResponseType, DataType>
 }
 
 export type ConnectExpressMiddleware = (
@@ -34,22 +51,27 @@ export type ConnectExpressMiddleware = (
  * @param {NextApiHandler} handler Next.js API handler.
  * @returns Middleware composed with Next.js API handler.
  */
-export function compose<T>(
-  middlewareOrOptions: NextApiComposeMiddlewares<T> | NextApiComposeOptions<T>,
+export function compose<RequestType, ResponseType = NextApiResponse, DataType = any>(
+  middlewareOrOptions:
+    | NextApiComposeMiddlewares<RequestType, ResponseType>
+    | NextApiComposeOptions<RequestType, ResponseType>,
   handler: (
-    request: ExtendableNextApiRequest<T>,
-    response: NextApiResponse
+    request: ExtendableNextApiRequest<RequestType>,
+    response: ExtendableNextApiResponse<ResponseType, DataType>
   ) => void | Promise<void>
 ) {
   const isOptions = !Array.isArray(middlewareOrOptions)
   const chain = isOptions ? middlewareOrOptions.middlewareChain : middlewareOrOptions
 
-  return async (request: ExtendableNextApiRequest<T>, response: NextApiResponse) => {
+  return async (
+    request: ExtendableNextApiRequest<RequestType>,
+    response: ExtendableNextApiResponse<ResponseType, DataType>
+  ) => {
     if (chain.length === 0) {
       return handler(request, response)
     }
 
-    return chain.reduceRight<ExtendedNextApiHandler<T>>(
+    return chain.reduceRight<ExtendedNextApiHandler<RequestType, ResponseType, DataType>>(
       (previousMiddleware, currentMiddleware) => {
         return async (request, response) => {
           try {
@@ -75,9 +97,14 @@ export function compose<T>(
  * [connect]: https://github.com/senchalabs/connect
  * [express]: https://expressjs.com
  */
-export function convert<T>(middleware: ConnectExpressMiddleware) {
-  return function (handler: ExtendedNextApiHandler<T>) {
-    return async (request: ExtendableNextApiRequest<T>, response: NextApiResponse) => {
+export function convert<RequestType, ResponseType = NextApiResponse, DataType = any>(
+  middleware: ConnectExpressMiddleware
+) {
+  return function (handler: ExtendedNextApiHandler<RequestType, ResponseType, DataType>) {
+    return async (
+      request: ExtendableNextApiRequest<RequestType>,
+      response: ExtendableNextApiResponse<ResponseType, DataType>
+    ) => {
       await middleware(request, response, () => handler(request, response))
     }
   }
