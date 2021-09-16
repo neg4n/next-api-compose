@@ -5,15 +5,17 @@
 This library provides simple yet complete higher order function  
 with responsibility of composing multiple middleware functions into one [Next.js API route][next-api-routes] handler.
 
-The library **does not** contain routing utilities. I believe mechanism built in [Next.js][next-homepage] itself or [next-connect][next-connect] library are pretty enough solutions.
+The library **does not** contain routing utilities. I believe mechanism built in  
+[Next.js][next-homepage] itself or [next-connect][next-connect] library are pretty enough solutions.
 
 ## Features
 
 - [x] 😇 Simple and powerful API
 - [x] 🧬 Maintaining order of middleware chain
+- [x] 🔧 Compatible with [Express][express]/[Connect][connect] middleware
 - [x] 💢 Error handling
 - [x] 📦 No dependencies
-- [ ] 🔧 Utility to convert Express middleware to [Next.js API HOF][next-api-routes]
+- [ ] 💯 100% Test coverage
 
 ## Installing
 
@@ -36,6 +38,24 @@ export default compose([withBar, withFoo], (request, response) => {
 
 _the `withBar` middleware will append `bar` property to `request` object, then `withFoo` will do accordingly the same but with `foo` property_
 
+## Using Express or Connect middleware
+
+If you want to use `next-api-compose` along with [Connect][connect] middleware that is widely used eg. in [Express][express] framework, there is special utility function for it.
+
+```js
+import { compose, convert } from 'next-api-compose'
+import helmet from 'helmet'
+
+const withHelmet = convert(helmet())
+
+export default compose([withBar, withFoo, withHelmet], (request, response) => {
+  const { foo, bar } = request
+  response.status(200).json({ foo, bar })
+})
+```
+
+_in this example, popular middleware [helmet][helmet] is converted using utility function from `next-api-compose` and passed as one element in middleware chain_
+
 ## Advanced usage:
 
 ```js
@@ -43,8 +63,7 @@ import { compose } from 'next-api-compose'
 
 export default compose(
   { sharedErrorHandler, middlewareChain: [withBar, withFoo, withError] },
-  (request, response) => {
-    // This is unreachable because   ^^^^^^^^^ will return 418 status.
+  (request, response) => { // This is unreachable because   ^^^^^^^^^ will return 418 status.
     const { foo, bar } = request
     response.status(200).json({ foo, bar })
   }
@@ -125,6 +144,9 @@ function withBar(handler: ExtendedNextApiHandler<NextApiRequestWithBar>) {
 This project is licensed under the MIT license.  
 All contributions are welcome.
 
+[helmet]: https://github.com/helmetjs/helmet
+[connect]: https://github.com/senchalabs/connect
+[express]: https://expressjs.com
 [next-homepage]: https://nextjs.org/
-[next-connect]: [https://github.com/hoangvvo/next-connect]
+[next-connect]: https://github.com/hoangvvo/next-connect
 [next-api-routes]: https://nextjs.org/docs/api-routes/introduction

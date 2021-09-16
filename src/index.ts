@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
+import type { IncomingMessage, OutgoingMessage } from 'http'
 
 export type ExtendableNextApiRequest<T> = T extends NextApiRequest ? T : NextApiRequest
 
@@ -20,12 +21,18 @@ export type NextApiComposeOptions<T> = {
   middlewareChain: NextApiComposeMiddlewares<T>
 }
 
+export type ConnectExpressMiddleware = (
+  request: IncomingMessage,
+  response: OutgoingMessage,
+  next: () => void
+) => void | Promise<void>
+
 /**
  * Higher order function that composes multiple middlewares into one API Handler.
  *
  * @param {NextApiComposeMiddlewares | NextApiComposeOptions} middlewareOrOptions Middlewares array **(order matters)** or options object with previously mentioned middlewares array as `middlewareChain` property and error handler shared by every middleware in the array as `sharedErrorHandler` property.
- * @param {NextApiHandler} handler Next.js API handler
- * @returns Middleware composed with Next.js API handler
+ * @param {NextApiHandler} handler Next.js API handler.
+ * @returns Middleware composed with Next.js API handler.
  */
 export function compose<T>(
   middlewareOrOptions: NextApiComposeMiddlewares<T> | NextApiComposeOptions<T>,
@@ -56,5 +63,22 @@ export function compose<T>(
       },
       handler
     )(request, response)
+  }
+}
+
+/**
+ * Higher order function that converts [Connect]/[Express] middleware into middleware compatible with `next-api-compose`.
+ *
+ * @param {ConnectExpressMiddleware} middleware [Connect]/[Express] middleware to convert.
+ * @returns Middleware compatible with `next-api-compose`.
+ *
+ * [connect]: https://github.com/senchalabs/connect
+ * [express]: https://expressjs.com
+ */
+export function convert(middleware: ConnectExpressMiddleware) {
+  return function (handler: NextApiHandler) {
+    return async (request: NextApiRequest, response: NextApiResponse) => {
+      await middleware(request, response, () => handler(request, response))
+    }
   }
 }
