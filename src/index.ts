@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
-import type { IncomingMessage, OutgoingMessage } from 'http'
+import type { IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
 
 export type ExtendableNextApiRequest<T> = T extends NextApiRequest ? T : NextApiRequest
 
@@ -23,8 +23,8 @@ export type NextApiComposeOptions<T> = {
 
 export type ConnectExpressMiddleware = (
   request: IncomingMessage,
-  response: OutgoingMessage,
-  next: () => void
+  response: OutgoingMessage | ServerResponse,
+  next: (error?: Error) => void
 ) => void | Promise<void>
 
 /**
@@ -75,9 +75,9 @@ export function compose<T>(
  * [connect]: https://github.com/senchalabs/connect
  * [express]: https://expressjs.com
  */
-export function convert(middleware: ConnectExpressMiddleware) {
-  return function (handler: NextApiHandler) {
-    return async (request: NextApiRequest, response: NextApiResponse) => {
+export function convert<T>(middleware: ConnectExpressMiddleware) {
+  return function (handler: ExtendedNextApiHandler<T>) {
+    return async (request: ExtendableNextApiRequest<T>, response: NextApiResponse) => {
       await middleware(request, response, () => handler(request, response))
     }
   }
