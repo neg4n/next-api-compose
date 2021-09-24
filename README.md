@@ -1,4 +1,4 @@
-# Next.js API Compose &middot; [![version](https://badgen.net/npm/v/next-api-compose)](https://www.npmjs.com/package/next-api-compose) [![types](https://badgen.net/npm/types/next-api-compose)](https://www.npmjs.com/package/next-api-compose) [![npm bundle size](https://badgen.net/bundlephobia/minzip/next-api-compose)](https://bundlephobia.com/package/next-api-compose) [![license](https://badgen.net/npm/license/next-api-compose)]()
+# Next.js API Compose &middot; [![version](https://badgen.net/npm/v/next-api-compose)](https://www.npmjs.com/package/next-api-compose) [![codecov](https://codecov.io/gh/neg4n/next-api-compose/branch/development/graph/badge.svg?token=VDJSVV76LD)](https://codecov.io/gh/neg4n/next-api-compose) [![CodeFactor](https://www.codefactor.io/repository/github/neg4n/next-api-compose/badge)](https://www.codefactor.io/repository/github/neg4n/next-api-compose) [![npm bundle size](https://badgen.net/bundlephobia/minzip/next-api-compose)](https://bundlephobia.com/package/next-api-compose)
 
 ## Introduction
 
@@ -11,6 +11,7 @@ The library **does not** contain routing utilities. I believe mechanism built in
 ## Features
 
 - [x] 😇 Simple and powerful API
+- [x] 🥷 TypeScript support
 - [x] 🧬 Maintaining order of middleware chain
 - [x] 🔧 Compatible with [Express][express]/[Connect][connect] middleware
 - [x] 💢 Error handling
@@ -60,15 +61,14 @@ _in this example, popular middleware [helmet][helmet] is converted using utility
 
 You can find more examples here:
 
-* JavaScript
-  * [Basic usage with error handling][basic-error-handling]
-  * [Basic usage with Connect/Express middleware][basic-express-middleware]
-* TypeScript
-  * [Basic usage with TypeScript][basic-typescript]
-  * [Advanced & complete usage with TypeScript][advanced-typescript-complete]
+- JavaScript
+  - [Basic usage with error handling][basic-error-handling]
+  - [Basic usage with Connect/Express middleware][basic-express-middleware]
+- TypeScript
+  - [Basic usage with TypeScript][basic-typescript]
+  - [Advanced & complete usage with TypeScript][advanced-typescript-complete]
 
-
-*the `example/` directory contains simple [Next.js][next-homepage] application implementing `next-api-compose` . To fully explore examples implemented in it by yourself - simply do `cd examples && npm i && npm run dev` then navigate to http://localhost:3000/*
+_the `example/` directory contains simple [Next.js][next-homepage] application implementing `next-api-compose` . To fully explore examples implemented in it by yourself - simply do `cd examples && npm i && npm run dev` then navigate to http://localhost:3000/_
 
 ## Caveats
 
@@ -109,7 +109,6 @@ All contributions are welcome.
 [next-extending-api-parameters]: https://nextjs.org/docs/api-routes/api-middlewares#extending-the-reqres-objects-with-typescript
 [next-api-routes-config]: https://nextjs.org/docs/api-routes/api-middlewares#custom-config
 [next-api-routes]: https://nextjs.org/docs/api-routes/introduction
-
 [basic-error-handling]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/basic-error-handling.js
 [basic-express-middleware]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/basic-express-middleware.js
 [basic-typescript]: https://github.com/neg4n/next-api-compose/tree/main/example/pages/api/basic-typescript.ts
