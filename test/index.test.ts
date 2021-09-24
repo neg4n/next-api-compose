@@ -84,7 +84,7 @@ describe(compose, () => {
           response.setHeader('Content-Type', 'application/json')
           response.end(JSON.stringify({ message: error.message }))
         },
-        middlewareChain: [withMockedFizzBuzz, withThrowError, withMockedFooBar]
+        middlewareChain: [withMockedFizzBuzz, withMockedFooBar, withThrowError]
       },
       (request, response) => {
         response.setHeader('Content-Type', 'application/json')
@@ -98,6 +98,33 @@ describe(compose, () => {
       .get('/')
       .expect(418)
       .expect({ message: 'im a teapot error message' })
+  })
+
+  it('should compose 3 middleware chain in which one throws error and return 418 with property that got intercepted before throw from sharedErrorHandler', async () => {
+    const mockedNextApiRoute = compose<
+      MockedRequestWithFooFizz,
+      MockedResponseWithBarBuzz
+    >(
+      {
+        sharedErrorHandler: (error, request, response) => {
+          response.statusCode = 418
+          response.setHeader('Content-Type', 'application/json')
+          response.end(JSON.stringify({ message: error.message, fizz: request.fizz }))
+        },
+        middlewareChain: [withMockedFizzBuzz, withThrowError, withMockedFooBar]
+      },
+      (request, response) => {
+        response.setHeader('Content-Type', 'application/json')
+        response.end(JSON.stringify({ foo: request.foo, fizz: request.fizz }))
+      }
+    )
+
+    const server = createDummyNextServer(mockedNextApiRoute)
+
+    await request(server)
+      .get('/')
+      .expect(418)
+      .expect({ message: 'im a teapot error message', fizz: 'fizz' })
   })
 })
 

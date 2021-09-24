@@ -32,8 +32,8 @@ export type NextApiComposeOptions<
 > = {
   sharedErrorHandler: (
     error: Error,
-    request: NextApiRequest,
-    response: NextApiResponse
+    request: ExtendableNextApiRequest<RequestType>,
+    response: ExtendableNextApiResponse<ResponseType, DataType>
   ) => void | Promise<void>
   middlewareChain: NextApiComposeMiddlewares<RequestType, ResponseType, DataType>
 }
