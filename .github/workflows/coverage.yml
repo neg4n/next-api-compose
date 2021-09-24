@@ -11,8 +11,9 @@ jobs:
         with:
           node-version: 16
       - name: Test
-        run: npm ci
-        run: npm t -- --coverage
+        run: |
+          npm ci
+          npm t -- --coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
