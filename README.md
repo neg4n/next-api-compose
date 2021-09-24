@@ -15,7 +15,7 @@ The library **does not** contain routing utilities. I believe mechanism built in
 - [x] 🔧 Compatible with [Express][express]/[Connect][connect] middleware
 - [x] 💢 Error handling
 - [x] 📦 No dependencies
-- [ ] 💯 100% Test coverage
+- [x] 💯 100% Test coverage
 
 ## Installing
 
