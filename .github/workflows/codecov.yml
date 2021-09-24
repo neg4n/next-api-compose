@@ -1,12 +1,12 @@
 name: Codecov
-on: [push, pull_request]
+on: pull_request
 jobs:
   run:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x, 14.x, 16.x]
 
     steps:
       - name: Fetch
@@ -21,7 +21,7 @@ jobs:
 
       - name: Test
         run: |
-          npm install
+          npm ci
           npm t -- --coverage
 
       - name: Upload coverage to Codecov
