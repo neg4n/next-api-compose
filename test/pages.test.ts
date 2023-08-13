@@ -15,7 +15,7 @@ import {
   connectMockedFizzBuzz,
   connectMockedFooBar
 } from './__stubs__/middleware'
-import { compose, convert } from '../src'
+import { compose, convert } from '../src/pages'
 
 type MockedRequestWithFooFizz = MockedNextRequestWithFoo & MockedNextRequestWithFizz
 type MockedResponseWithBarBuzz = MockedNextResponseWithBar & MockedNextResponseWithBuzz
