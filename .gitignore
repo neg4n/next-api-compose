@@ -3,3 +3,5 @@ lib
 coverage
 .vscode
 .DS_Store
+dist
+example-app

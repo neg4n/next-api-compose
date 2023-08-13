@@ -3,9 +3,10 @@
     "target": "es6",
     "strictNullChecks": true,
     "moduleResolution": "node",
+    "rootDir": "src",
+    "declaration": true,
     "module": "commonjs",
     "esModuleInterop": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "lib", "test/", "coverage"]
+  "include": ["src/**/*.ts"]
 }
