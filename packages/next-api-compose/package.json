@@ -38,7 +38,8 @@
     "build": "tsup src/app.ts src/pages.ts --dts --minify",
     "examples": "pnpm run build:watch",
     "build:watch": "pnpm run build --watch",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "pnpm run test --coverage"
   },
   "peerDependencies": {
     "next": ">=13.4.13",

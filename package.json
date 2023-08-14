@@ -2,7 +2,8 @@
   "name": "repository",
   "private": true,
   "scripts": {
-    "examples": "turbo examples --parallel --filter=example-app-router --filter=next-api-compose"
+    "examples": "turbo examples --parallel --filter=example-app-router --filter=next-api-compose",
+    "test": "turbo test --filter=next-api-compose"
   },
   "devDependencies": {
     "turbo": "^1.10.12"

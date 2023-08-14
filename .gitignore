@@ -4,5 +4,6 @@ coverage
 .vscode
 .DS_Store
 dist
+report.json
 .turbo
 example-app
