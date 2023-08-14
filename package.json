@@ -1,67 +1,10 @@
 {
-  "name": "next-api-compose",
-  "version": "2.0.0",
-  "description": "Compose middleware chain in Next.js API Routes",
-  "author": {
-    "name": "Igor Klepacki",
-    "email": "neg4n@icloud.com",
-    "url": "https://neg4n.dev/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/neg4n/next-api-compose"
-  },
-  "keywords": [
-    "nextjs",
-    "nextjs-plugin",
-    "middleware",
-    "next.js"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/neg4n/next-api-compose/issues"
-  },
-  "homepage": "https://github.com/neg4n/next-api-compose/#readme",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    "./app": "./dist/app.js",
-    "./pages": "./dist/pages.js"
-  },
+  "name": "repository",
+  "private": true,
   "scripts": {
-    "prepublishOnly": "pnpm run build",
-    "prebuild": "rimraf dist",
-    "build": "tsup src/app.ts src/pages.ts --dts --minify",
-    "build:watch": "pnpm run build --watch",
-    "test": "jest"
-  },
-  "peerDependencies": {
-    "next": ">=13.4.13",
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "examples": "turbo examples --parallel --filter=example-app-router --filter=next-api-compose"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.9.1",
-    "@types/supertest": "^2.0.11",
-    "jest": "^27.2.1",
-    "prettier": "^2.4.0",
-    "rimraf": "^3.0.2",
-    "supertest": "^6.1.6",
-    "ts-jest": "^27.0.5",
-    "ts-node": "^10.2.1",
-    "tsup": "^7.2.0",
-    "type-fest": "^4.2.0",
-    "typescript": "^5.1.6"
-  },
-  "prettier": {
-    "printWidth": 90,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "none",
-    "bracketSpacing": true
+    "turbo": "^1.10.12"
   }
 }
