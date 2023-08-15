@@ -1,21 +1,25 @@
-import { NextApiRequest } from 'next'
 import { compose } from 'next-api-compose'
+import { z } from 'zod'
+
+import { validation } from '@/middleware/with-validation'
+import { hello } from '@/middleware/with-hello'
+
+const schema = z
+  .object({
+    foo: z.string(),
+    bar: z.string().default('bar')
+  })
+  .strict()
 
 const { GET, POST } = compose({
-  GET: async (request) => {
+  GET: async () => {
     return new Response('haha')
   },
   POST: [
-    [
-      async (request: NextApiRequest & { foo: string }) => {
-        request.foo = 'bar'
-      },
-      (request: NextApiRequest & { bar: string }) => {
-        request.bar = 'foo'
-      }
-    ],
+    [validation<typeof schema>('body', schema), hello],
     async (request /* Correctly inferred 🚀 */) => {
-      return new Response(request.foo + request.bar)
+      const { foo, bar } = request.validData
+      return new Response(`${request.hello} ${foo}${bar}`)
     }
   ]
 })

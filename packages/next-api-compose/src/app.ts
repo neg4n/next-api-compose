@@ -19,7 +19,12 @@ type NextApiMethodHandler = (
 type ComposeParameters<
   Methods extends NextApiRouteMethod,
   MiddlewareChain extends Array<
-    (request: any) => Promisable<NextResponse> | Promisable<Response> | Promisable<void>
+    (
+      request: any
+    ) =>
+      | Promisable<NextResponse | undefined>
+      | Promisable<Response | undefined>
+      | Promisable<void | undefined>
   >
 > = Record<
   Methods,
@@ -39,7 +44,12 @@ type ComposeParameters<
 export function compose<
   UsedMethods extends NextApiRouteMethod,
   MiddlewareChain extends Array<
-    (request: any) => Promisable<NextResponse> | Promisable<Response> | Promisable<void>
+    (
+      request: any
+    ) =>
+      | Promisable<NextResponse | undefined>
+      | Promisable<Response | undefined>
+      | Promisable<void | undefined>
   >
 >(parameters: ComposeParameters<UsedMethods, MiddlewareChain>) {
   const modified = Object.entries(parameters).map(
