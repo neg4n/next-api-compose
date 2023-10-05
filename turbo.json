@@ -1,0 +1,11 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "examples": {
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": false,
+      "persistent": true
+    },
+    "build": {}
+  }
+}

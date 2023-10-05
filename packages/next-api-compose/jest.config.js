@@ -3,5 +3,6 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   collectCoverageFrom: ['src/*'],
-  coverageReporters: ['html', 'json', 'lcov']
+  coverageReporters: ['html', 'json', 'lcov'],
+  coverageProvider: 'v8'
 }

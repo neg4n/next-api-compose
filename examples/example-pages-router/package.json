@@ -1,11 +1,8 @@
 {
-  "name": "preview",
-  "version": "0.1.0",
+  "name": "example-pages-router",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "examples": "next dev -p 3001"
   },
   "dependencies": {
     "helmet": "^4.6.0",

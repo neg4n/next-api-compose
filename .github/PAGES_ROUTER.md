@@ -1,11 +1,13 @@
-# Next.js API Compose &middot; [![version](https://badgen.net/npm/v/next-api-compose)](https://www.npmjs.com/package/next-api-compose) [![codecov](https://codecov.io/gh/neg4n/next-api-compose/branch/development/graph/badge.svg?token=VDJSVV76LD)](https://codecov.io/gh/neg4n/next-api-compose) [![CodeFactor](https://www.codefactor.io/repository/github/neg4n/next-api-compose/badge)](https://www.codefactor.io/repository/github/neg4n/next-api-compose) [![npm bundle size](https://badgen.net/bundlephobia/minzip/next-api-compose)](https://bundlephobia.com/package/next-api-compose)
+# Next.js API Compose &middot; [![version](https://badgen.net/npm/v/next-api-compose)](https://www.npmjs.com/package/next-api-compose) [![npm bundle size](https://badgen.net/bundlephobia/minzip/next-api-compose)](https://bundlephobia.com/package/next-api-compose)
 
 ## Introduction
 
 This library provides simple yet complete higher order function  
-with responsibility of composing multiple middleware functions into one [Next.js API route][next-api-routes] handler.
+with responsibility of composing multiple middleware functions into one [Next.js API route][next-api-routes] handler in the pages directory router configuration.
 
-The library **does not** contain routing utilities. I believe mechanism built in  
+Learn more about using the library for App Directory's Route Handlers [here](./README.md).
+
+The library for pages router **does not** contain routing utilities. I believe mechanism built in  
 [Next.js][next-homepage] itself or [next-connect][next-connect] library are sufficient solutions.
 
 ## Features
@@ -16,7 +18,7 @@ The library **does not** contain routing utilities. I believe mechanism built in
 - [x] 🔧 Compatible with [Express][express]/[Connect][connect] middleware
 - [x] 💢 Error handling
 - [x] 📦 No dependencies
-- [x] 💯 100% Test coverage
+- [x] 💯 100% Test coverage for pages router
 
 ## Installing
 
@@ -24,17 +26,19 @@ The library **does not** contain routing utilities. I believe mechanism built in
 npm i next-api-compose -S
 # or
 yarn add next-api-compose
+# or
+pnpm i next-api-compose
 ```
 
 ## Basic usage:
 
 ```js
-import { compose } from 'next-api-compose'
+import { compose } from "next-api-compose/pages";
 
 export default compose([withBar, withFoo], (request, response) => {
-  const { foo, bar } = request
-  response.status(200).json({ foo, bar })
-})
+  const { foo, bar } = request;
+  response.status(200).json({ foo, bar });
+});
 ```
 
 _the `withBar` middleware will append `bar` property to `request` object, then `withFoo` will do accordingly the same but with `foo` property_
@@ -44,15 +48,15 @@ _the `withBar` middleware will append `bar` property to `request` object, then `
 If you want to use `next-api-compose` along with [Connect][connect] middleware that is widely used eg. in [Express][express] framework, there is special utility function for it.
 
 ```js
-import { compose, convert } from 'next-api-compose'
-import helmet from 'helmet'
+import { compose, convert } from "next-api-compose/pages";
+import helmet from "helmet";
 
-const withHelmet = convert(helmet())
+const withHelmet = convert(helmet());
 
 export default compose([withBar, withFoo, withHelmet], (request, response) => {
-  const { foo, bar } = request
-  response.status(200).json({ foo, bar })
-})
+  const { foo, bar } = request;
+  response.status(200).json({ foo, bar });
+});
 ```
 
 _in this example, popular middleware [helmet][helmet] is converted using utility function from `next-api-compose` and passed as one element in middleware chain_
@@ -77,9 +81,9 @@ _the `example/` directory contains simple [Next.js][next-homepage] application i
     ```js
     export const config = {
       api: {
-        externalResolver: true
-      }
-    }
+        externalResolver: true,
+      },
+    };
     ```
 
     to your [Next.js API route configuration][next-api-routes-config] in order to dismiss false positive
@@ -89,7 +93,7 @@ _the `example/` directory contains simple [Next.js][next-homepage] application i
 2.  If you are using TypeScript and strict types _(no `any` at all)_, you may want to use [Partial][typescript-partial]
 
     ```ts
-    type NextApiRequestWithFoo = NextApiRequest & Partial<{ foo: string }>
+    type NextApiRequestWithFoo = NextApiRequest & Partial<{ foo: string }>;
     ```
 
     when extending [API Route parameters' objects][next-extending-api-parameters] to avoid type errors during usage of `compose`.

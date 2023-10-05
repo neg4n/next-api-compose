@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import type { IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
 
 export type ExtendableNextApiRequest<T> = T extends NextApiRequest ? T : NextApiRequest
@@ -107,5 +107,25 @@ export function convert<RequestType, ResponseType = NextApiResponse, DataType = 
     ) => {
       await middleware(request, response, () => handler(request, response))
     }
+  }
+}
+
+/**
+ * Higher order function that is used to simplify Next.js API middleware configuration.
+ */
+export function configure<
+  ConfigType,
+  RequestType,
+  ResponseType = NextApiResponse,
+  DataType = any
+>(
+  middleware: (
+    handler: ExtendedNextApiHandler<RequestType, ResponseType, DataType>,
+    config: ConfigType
+  ) => ExtendedNextApiHandler<RequestType, ResponseType, DataType>,
+  config: ConfigType
+) {
+  return (handler: ExtendedNextApiHandler<RequestType, ResponseType, DataType>) => {
+    return middleware(handler, config)
   }
 }
