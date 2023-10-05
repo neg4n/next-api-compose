@@ -1,8 +1,7 @@
 <picture>
-
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/code_dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/code_light.png">
-
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/neg4n/next-api-compose/development/.github/assets/code_dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/neg4n/next-api-compose/development/.github/assets/code_light.png">
+  <img align="right" width="500px" height="500px" alt="next-api-compose example code theme aware" src="https://raw.githubusercontent.com/neg4n/next-api-compose/development/.github/assets/code_dark.png"/>
 </picture>
 
 # Next.js API Compose &middot; [![version](https://badgen.net/npm/v/next-api-compose)](https://www.npmjs.com/package/next-api-compose) [![npm bundle size](https://badgen.net/bundlephobia/minzip/next-api-compose)](https://bundlephobia.com/package/next-api-compose)
