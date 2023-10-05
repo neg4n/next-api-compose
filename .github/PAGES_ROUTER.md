@@ -5,7 +5,7 @@
 This library provides simple yet complete higher order function  
 with responsibility of composing multiple middleware functions into one [Next.js API route][next-api-routes] handler in the pages directory router configuration.
 
-Learn more about the
+Learn more about using the library for App Directory's Route Handlers [here](./README.md).
 
 The library for pages router **does not** contain routing utilities. I believe mechanism built in  
 [Next.js][next-homepage] itself or [next-connect][next-connect] library are sufficient solutions.
