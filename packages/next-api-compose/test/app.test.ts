@@ -2,7 +2,7 @@ import { createServer } from 'http'
 import request from 'supertest'
 import { compose } from '../src/app'
 import type { IncomingMessage } from 'http'
-import { Number, Test } from 'ts-toolbelt'
+
 class MockedResponse {
   body: any = null
   status: number = 200
@@ -120,10 +120,3 @@ describe('composed Route Handler', () => {
     expect(response.body.foo).toBe('bar')
   })
 })
-
-const { checks, check } = Test
-
-checks([
-  check<Number.Add<1, 30>, 31, Test.Pass>(),
-  check<Number.Add<5, -3>, 2, Test.Pass>()
-])
