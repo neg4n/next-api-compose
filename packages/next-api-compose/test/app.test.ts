@@ -2,10 +2,10 @@ import { createServer } from 'http'
 import request from 'supertest'
 import { compose } from '../src/app'
 import type { IncomingMessage } from 'http'
-
+import { Number, Test } from 'ts-toolbelt'
 class MockedResponse {
-  status: number = 200
   body: any = null
+  status: number = 200
   headers: { [key: string]: string } = {}
 
   constructor(body?: any, status: number = 200) {
@@ -13,6 +13,8 @@ class MockedResponse {
     this.status = status
   }
 }
+
+Object.setPrototypeOf(MockedResponse.prototype, Response.prototype)
 
 type HandlerFunction = (req: IncomingMessage) => Promise<MockedResponse>
 
@@ -91,4 +93,37 @@ describe('composed Route Handler', () => {
     expect(response.status).toBe(200)
     expect(response.body.foo).toBe('foobar')
   })
+
+  it('should abort further middleware execution and return the response if a middleware returns a Response instance.', async () => {
+    function abortMiddleware(request) {
+      request.foo = 'bar'
+      return new MockedResponse({ foo: request.foo }, 418)
+    }
+
+    function setFooMiddleware(request) {
+      request.foo = 'foo'
+    }
+
+    const { GET } = compose({
+      GET: [
+        [abortMiddleware, setFooMiddleware],
+        () => {
+          return new MockedResponse({ foo: 'unreachable fizz' })
+        }
+      ]
+    })
+
+    const app = createTestServer(GET)
+    const response = await request(app).get('/')
+
+    expect(response.status).toBe(418)
+    expect(response.body.foo).toBe('bar')
+  })
 })
+
+const { checks, check } = Test
+
+checks([
+  check<Number.Add<1, 30>, 31, Test.Pass>(),
+  check<Number.Add<5, -3>, 2, Test.Pass>()
+])
