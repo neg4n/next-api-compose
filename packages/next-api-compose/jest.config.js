@@ -4,5 +4,6 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverageFrom: ['src/*'],
   coverageReporters: ['html', 'json', 'lcov'],
+  setupFilesAfterEnv: ['./jest.setup.js'],
   coverageProvider: 'v8'
 }
