@@ -2,6 +2,7 @@ import { createServer } from 'http'
 import request from 'supertest'
 import { compose } from '../src/app'
 import type { IncomingMessage } from 'http'
+import './inference'
 
 class MockedResponse {
   body: any = null
