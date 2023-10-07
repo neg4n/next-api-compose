@@ -8,7 +8,7 @@
 
 ## Introduction
 
-This library provides hassle-free way of composing multiple middleware functions into one [Next.js API Route Handler][next-api-route-handlers]'s method in the **[App Directory][next-app-router-intro]** router.
+This library provides a hassle-free way of composing multiple middleware functions into one [Next.js API Route Handler][next-api-route-handlers]'s method in the **[App Directory][next-app-router-intro]** router.
 
 > [!IMPORTANT]
 > The `2.0.0` version of the library supports both [app] and pages directory API utilities. If you're still using Pages Router and you want to migrate from versions below `2.0.0`, please read [migration guide](./MIGRATE_V2.md).
@@ -83,7 +83,7 @@ export { GET };
 
 1. Unfortunately there is no way to dynamically export named ESModules _(or at least I did not find a way)_ so you have to use `export { GET, POST }` syntax instead of something like `export compose(...)` if you're composing GET and POST methods :(
 
-2. Middleware is executed as specified in per-method array, so if you want to execute middleware in specific order, you have to be careful about it. Early returned `new Response()` halts the middleware chain.
+2. Middleware is executed as specified in the per-method array, so if you want to execute middleware in a specific order, you have to be careful about it. Early returned `new Response()` halts the middleware chain.
 
 ## License and contributions
 
