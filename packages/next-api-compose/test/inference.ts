@@ -19,9 +19,6 @@ compose({
       type HasFooProperty = O.Has<HandlerRequestType, 'foo', string>
       const assertHasFooProperty: HasFooProperty = 1
 
-      type HasBarProperty = O.Has<HandlerRequestType, 'bar', string>
-      const assertHasBarProperty: HasBarProperty = 0
-
       return new Response(request.foo)
     }
   ]

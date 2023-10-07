@@ -25,7 +25,7 @@ importers:
         version: 18.2.7
       next:
         specifier: 13.4.13
-        version: 13.4.13(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.13(@babel/core@7.22.10)(react-dom@18.2.0)(react@18.2.0)
       next-api-compose:
         specifier: workspace:*
         version: link:../../packages/next-api-compose
@@ -86,8 +86,8 @@ importers:
         specifier: ^27.0.2
         version: 27.0.2
       '@types/node':
-        specifier: ^16.9.1
-        version: 16.9.1
+        specifier: 20.8.3
+        version: 20.8.3
       '@types/supertest':
         specifier: ^2.0.11
         version: 2.0.11
@@ -108,7 +108,7 @@ importers:
         version: 27.0.5(@babel/core@7.22.10)(@types/jest@27.0.2)(jest@27.2.1)(typescript@5.1.6)
       ts-node:
         specifier: ^10.2.1
-        version: 10.2.1(@types/node@16.9.1)(typescript@5.1.6)
+        version: 10.2.1(@types/node@20.8.3)(typescript@5.1.6)
       ts-toolbelt:
         specifier: ^9.6.0
         version: 9.6.0
@@ -1218,6 +1218,10 @@ packages:
   /@types/node@20.4.10:
     resolution: {integrity: sha512-vwzFiiy8Rn6E0MtA13/Cxxgpan/N6UeNYR9oUu6kuJWxu6zCk98trcDp8CBhbtaeuq9SykCmXkFr2lWLoPcvLg==}
     dev: false
+
+  /@types/node@20.8.3:
+    resolution: {integrity: sha512-jxiZQFpb+NlH5kjW49vXxvxTjeeqlbsnTAdBTKpzEdPs9itay7MscYXz3Fo9VYFEsfQ6LJFitHad3faerLAjCw==}
+    dev: true
 
   /@types/prettier@2.7.3:
     resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
@@ -2860,7 +2864,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.2.1(@types/node@16.9.1)(typescript@5.1.6)
+      ts-node: 10.2.1(@types/node@20.8.3)(typescript@5.1.6)
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -3636,46 +3640,6 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next@13.4.13(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-A3YVbVDNeXLhWsZ8Nf6IkxmNlmTNz0yVg186NJ97tGZqPDdPzTrHotJ+A1cuJm2XfuWPrKOUZILl5iBQkIf8Jw==}
-    engines: {node: '>=16.8.0'}
-    hasBin: true
-    peerDependencies:
-      '@opentelemetry/api': ^1.1.0
-      react: ^18.2.0
-      react-dom: ^18.2.0
-      sass: ^1.3.0
-    peerDependenciesMeta:
-      '@opentelemetry/api':
-        optional: true
-      sass:
-        optional: true
-    dependencies:
-      '@next/env': 13.4.13
-      '@swc/helpers': 0.5.1
-      busboy: 1.6.0
-      caniuse-lite: 1.0.30001520
-      postcss: 8.4.14
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(react@18.2.0)
-      watchpack: 2.4.0
-      zod: 3.21.4
-    optionalDependencies:
-      '@next/swc-darwin-arm64': 13.4.13
-      '@next/swc-darwin-x64': 13.4.13
-      '@next/swc-linux-arm64-gnu': 13.4.13
-      '@next/swc-linux-arm64-musl': 13.4.13
-      '@next/swc-linux-x64-gnu': 13.4.13
-      '@next/swc-linux-x64-musl': 13.4.13
-      '@next/swc-win32-arm64-msvc': 13.4.13
-      '@next/swc-win32-ia32-msvc': 13.4.13
-      '@next/swc-win32-x64-msvc': 13.4.13
-    transitivePeerDependencies:
-      - '@babel/core'
-      - babel-plugin-macros
-    dev: false
-
   /node-fetch@2.6.1:
     resolution: {integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==}
     engines: {node: 4.x || >=6.0.0}
@@ -3915,7 +3879,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.1.0
-      ts-node: 10.2.1(@types/node@16.9.1)(typescript@5.1.6)
+      ts-node: 10.2.1(@types/node@20.8.3)(typescript@5.1.6)
       yaml: 2.3.1
     dev: true
 
@@ -4492,23 +4456,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /styled-jsx@5.1.1(react@18.2.0):
-    resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
-    engines: {node: '>= 12.0.0'}
-    peerDependencies:
-      '@babel/core': '*'
-      babel-plugin-macros: '*'
-      react: '>= 16.8.0 || 17.x.x || ^18.0.0-0'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      babel-plugin-macros:
-        optional: true
-    dependencies:
-      client-only: 0.0.1
-      react: 18.2.0
-    dev: false
-
   /stylis-rule-sheet@0.0.10(stylis@3.5.4):
     resolution: {integrity: sha512-nTbZoaqoBnmK+ptANthb10ZRZOGC+EmTLLUxeYIuHNkEKcmKgXX1XWKkUBT2Ac4es3NybooPe0SmvKdhKJZAuw==}
     peerDependencies:
@@ -4727,7 +4674,7 @@ packages:
       yargs-parser: 20.2.9
     dev: true
 
-  /ts-node@10.2.1(@types/node@16.9.1)(typescript@5.1.6):
+  /ts-node@10.2.1(@types/node@20.8.3)(typescript@5.1.6):
     resolution: {integrity: sha512-hCnyOyuGmD5wHleOQX6NIjJtYVIO8bPP8F2acWkB4W06wdlkgyvJtubO/I9NkI88hCFECbsEgoLc0VNkYmcSfw==}
     engines: {node: '>=12.0.0'}
     hasBin: true
@@ -4747,7 +4694,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 16.9.1
+      '@types/node': 20.8.3
       acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
