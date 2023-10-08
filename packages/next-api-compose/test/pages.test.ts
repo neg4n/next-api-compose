@@ -27,7 +27,7 @@ function createDummyNextServer(handler) {
   })
 }
 
-describe(compose, () => {
+describe("compose's http functionality", () => {
   it('should execute final handler if empty middleware chain is provided', async () => {
     const handler = compose([], (request, response) => {
       response.end('im empty')
@@ -104,7 +104,7 @@ describe(compose, () => {
   })
 })
 
-describe(convert, () => {
+describe("convert used along with compose http functionality", () => {
   it('should compose 2 converted connect/express middleware to hofs and intercept its request and response objects', async () => {
     const withMockedConnectFooBar = convert(connectMockedFooBar)
     const withMockedConnectFizzBuzz = convert(connectMockedFizzBuzz)
@@ -139,4 +139,8 @@ describe(convert, () => {
 
     expect(response.body).toStrictEqual({ fizz: 'fizz', foo: 'foo' })
   })
+})
+
+describe("configure's functionality", () => {
+
 })

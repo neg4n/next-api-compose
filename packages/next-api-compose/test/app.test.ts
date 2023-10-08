@@ -32,7 +32,7 @@ function createTestServer(handler: HandlerFunction) {
   })
 }
 
-describe('composed Route Handler', () => {
+describe("composed route handler's http functionality", () => {
   it('should correctly execute and return the response when no middleware is provided', async () => {
     const { GET } = compose({
       GET: [
@@ -72,6 +72,20 @@ describe('composed Route Handler', () => {
 
     expect(response.status).toBe(200)
     expect(response.body.foo).toBe('foobar')
+  })
+
+  it('should correctly execute handler without middleware chain provided', async () => {
+    const { GET } = compose({
+      GET: (request) => {
+        return new MockedResponse({ foo: 'bar' }) as any
+      }
+    })
+
+    const app = createTestServer(GET)
+    const response = await request(app).get('/')
+
+    expect(response.status).toBe(200)
+    expect(response.body.foo).toBe('bar')
   })
 
   it('should wait for asynchronous middlewares to resolve before moving to the next middleware or handler', async () => {
@@ -124,7 +138,26 @@ describe('composed Route Handler', () => {
     expect(response.status).toBe(418)
     expect(response.body.foo).toBe('bar')
   })
+})
 
+describe("composed route handler's code features", () => {
+  it("should correctly return multiple method handlers when they're composed", async () => {
+    const composedMethods = compose({
+      GET: (request) => {
+        return new MockedResponse({ foo: 'bar' }) as any
+      },
+      POST: (request) => {
+        return new MockedResponse({ fizz: 'buzz' }) as any
+      }
+    })
+
+    expect(composedMethods).toHaveProperty("GET")
+    expect(composedMethods).toHaveProperty("POST")
+  })
+})
+
+// It simply won't compile if there is an error in the inference, no need for runtime assertions
+describe('type inference', () => {
   it("should correctly infer final handler's intercepted request object's types", async () => {
     function someMiddleware(request: NextRequest & { foo?: string }) {
       request.foo = 'bar'
