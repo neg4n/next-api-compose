@@ -1,7 +1,12 @@
 import { createServer } from 'http'
 import request from 'supertest'
-import { compose } from '../src/app'
+import { it, describe, expect } from '@jest/globals'
+import type { NextRequest } from 'next/server'
+
+import { A, O } from 'ts-toolbelt'
 import type { IncomingMessage } from 'http'
+
+import { compose } from '../src/app'
 
 class MockedResponse {
   body: any = null
@@ -118,5 +123,29 @@ describe('composed Route Handler', () => {
 
     expect(response.status).toBe(418)
     expect(response.body.foo).toBe('bar')
+  })
+
+  it("should correctly infer final handler's intercepted request object's types", async () => {
+    function someMiddleware(request: NextRequest & { foo?: string }) {
+      request.foo = 'bar'
+    }
+
+    compose({
+      GET: [
+        [someMiddleware],
+        (request) => {
+          type HandlerRequestType = typeof request
+          type ExpectedRequestType = NextRequest & { foo?: string }
+          type IsExactType = A.Equals<HandlerRequestType, ExpectedRequestType>
+
+          const assertIsExactType: IsExactType = 1
+
+          type HasFooProperty = O.Has<HandlerRequestType, 'foo', string>
+          const assertHasFooProperty: HasFooProperty = 1
+
+          return new Response(request.foo)
+        }
+      ]
+    })
   })
 })
