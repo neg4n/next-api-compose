@@ -1,0 +1,13 @@
+name: Tests 
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: pnpm install
+      - name: Run tests for next-api-compose
+        run: pnpm test
