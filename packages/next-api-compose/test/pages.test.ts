@@ -16,7 +16,7 @@ import {
   connectMockedFizzBuzz,
   connectMockedFooBar
 } from './__stubs__/middleware'
-import { compose, convert } from '../src/pages'
+import { compose, convert, configure } from '../src/pages'
 
 type MockedRequestWithFooFizz = MockedNextRequestWithFoo & MockedNextRequestWithFizz
 type MockedResponseWithBarBuzz = MockedNextResponseWithBar & MockedNextResponseWithBuzz
@@ -104,7 +104,7 @@ describe("compose's http functionality", () => {
   })
 })
 
-describe("convert used along with compose http functionality", () => {
+describe('convert used along with compose http functionality', () => {
   it('should compose 2 converted connect/express middleware to hofs and intercept its request and response objects', async () => {
     const withMockedConnectFooBar = convert(connectMockedFooBar)
     const withMockedConnectFizzBuzz = convert(connectMockedFizzBuzz)
@@ -142,5 +142,44 @@ describe("convert used along with compose http functionality", () => {
 })
 
 describe("configure's functionality", () => {
+  const customMiddleware = (handler, config) => (request, response) => {
+    if (config.foo) {
+      request.foo = config.foo
+    } else {
+      request.foo = 'foo'
+    }
+    handler(request, response)
+  }
 
+  it('should configure middleware with provided configuration and pass it correctly using compose', async () => {
+    const config = { foo: 'bar' }
+
+    const configuredMiddleware = configure(customMiddleware, config)
+
+    const composedHandler = compose([configuredMiddleware], (request, response) => {
+      response.setHeader('Content-Type', 'application/json')
+      response.end(JSON.stringify({ foo: request.foo }))
+    })
+
+    const server = createDummyNextServer(composedHandler)
+    const response = await request(server).get('/')
+
+    expect(response.body.foo).toBe('bar')
+  })
+
+  it('should use default value when configuration is not provided', async () => {
+    const config = {}
+    const composedHandler = compose(
+      [configure(customMiddleware, config)],
+      (request, response) => {
+        response.setHeader('Content-Type', 'application/json')
+        response.end(JSON.stringify({ foo: request.foo }))
+      }
+    )
+
+    const server = createDummyNextServer(composedHandler)
+    const response = await request(server).get('/')
+
+    expect(response.body.foo).toBe('foo')
+  })
 })
