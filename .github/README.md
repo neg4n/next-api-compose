@@ -17,6 +17,7 @@ This library provides a hassle-free way of composing multiple middleware functio
 
 - [x] 😇 Simple and powerful API
 - [x] 🚀 Designed both for Pages Router and App Router
+- [x] 🧪 Production-ready. 100% test coverage, even type inference is tested!
 - [x] 🥷 Excellent TypeScript support
 - [x] 🧬 Maintaining order of middleware chain
 - [x] 📦 No dependencies, small footprint

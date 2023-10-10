@@ -6,6 +6,7 @@
       "cache": false,
       "persistent": true
     },
-    "build": {}
+    "build": {},
+    "test": {}
   }
 }
