@@ -86,7 +86,18 @@ export { GET };
 
 2. Middleware is executed as specified in the per-method array, so if you want to execute middleware in a specific order, you have to be careful about it. Early returned `new Response()` halts the middleware chain.
 
-## License and contributions
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## License and acknowledgements
 
 The project is licensed under The MIT License. Thanks for all the contributions! Feel free to open an issue or a pull request.
 
