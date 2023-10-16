@@ -8,10 +8,10 @@
 
 ## Introduction
 
-This library provides a hassle-free way of composing multiple middleware functions into one [Next.js API Route Handler][next-api-route-handlers]'s method in the **[App Directory][next-app-router-intro]** router.
+This library provides a hassle-free way of composing multiple middleware functions into one [Next.js API Route Handler][next-api-route-handlers]'s method in the **[App Directory][next-app-router]** router.
 
 > [!IMPORTANT]
-> The `2.0.0` version of the library supports both [app] and pages directory API utilities. If you're still using Pages Router and you want to migrate from versions below `2.0.0`, please read [migration guide](./MIGRATE_V2.md).
+> The `2.0.0` version of the library supports both [app][next-app-router] and [pages][next-app-router] directory oriented API utilities. If you're still using Pages Router and you want to migrate from versions below `2.0.0`, please read [migration guide](./.github/MIGRATE_V2.md) and ocassionally consider checking out [intro to the App Router][next-app-router-intro].
 
 ## Features
 
@@ -86,9 +86,22 @@ export { GET };
 
 2. Middleware is executed as specified in the per-method array, so if you want to execute middleware in a specific order, you have to be careful about it. Early returned `new Response()` halts the middleware chain.
 
-## License and contributions
+## Contributors
 
-The project is licensed under The MIT License. Thanks for all the contributions! Feel free to open an issue or a pull request.
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## License and acknowledgements
+
+The project is licensed under The MIT License. Thanks for all the contributions! Feel free to open an issue or a pull request even if it is just a question 🙌
 
 [next-api-route-handlers]: https://nextjs.org/docs/app/building-your-application/routing/route-handlers
 [next-app-router-intro]: https://nextjs.org/docs/app/building-your-application/routing#the-app-router
+[next-app-router]: https://nextjs.org/docs/app
+[next-pages-router]: https://nextjs.org/docs/pages
