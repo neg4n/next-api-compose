@@ -5,5 +5,21 @@
   "repoHost": "https://github.com",
   "files": [
     "README.md"
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "neg4n",
+      "name": "Igor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57688858?v=4",
+      "profile": "https://neg4n.dev/",
+      "contributions": [
+        "code",
+        "test",
+        "example"
+      ]
+    }
   ]
 }
