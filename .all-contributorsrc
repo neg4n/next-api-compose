@@ -5,5 +5,20 @@
   "repoHost": "https://github.com",
   "files": [
     "README.md"
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "mgrabka",
+      "name": "Maksymilian Grabka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/116151164?v=4",
+      "profile": "https://github.com/mgrabka",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    }
   ]
 }
