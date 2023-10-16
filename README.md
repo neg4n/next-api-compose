@@ -91,6 +91,13 @@ export { GET };
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mgrabka"><img src="https://avatars.githubusercontent.com/u/116151164?v=4?s=100" width="100px;" alt="Maksymilian Grabka"/><br /><sub><b>Maksymilian Grabka</b></sub></a><br /><a href="https://github.com/neg4n/next-api-compose/commits?author=mgrabka" title="Tests">⚠️</a> <a href="https://github.com/neg4n/next-api-compose/commits?author=mgrabka" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
