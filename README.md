@@ -91,6 +91,13 @@ export { GET };
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://neg4n.dev/"><img src="https://avatars.githubusercontent.com/u/57688858?v=4?s=100" width="100px;" alt="Igor"/><br /><sub><b>Igor</b></sub></a><br /><a href="https://github.com/neg4n/next-api-compose/commits?author=neg4n" title="Code">💻</a> <a href="https://github.com/neg4n/next-api-compose/commits?author=neg4n" title="Tests">⚠️</a> <a href="#example-neg4n" title="Examples">💡</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
