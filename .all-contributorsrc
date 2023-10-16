@@ -5,5 +5,19 @@
   "repoHost": "https://github.com",
   "files": [
     "README.md"
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "kacper3123",
+      "name": "kacper3123",
+      "avatar_url": "https://avatars.githubusercontent.com/u/89151689?v=4",
+      "profile": "https://github.com/kacper3123",
+      "contributions": [
+        "doc"
+      ]
+    }
   ]
 }
