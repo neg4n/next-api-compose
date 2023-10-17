@@ -94,6 +94,8 @@ export { GET };
 <table>
   <tbody>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://neg4n.dev/"><img src="https://avatars.githubusercontent.com/u/57688858?v=4?s=100" width="100px;" alt="Igor"/><br /><sub><b>Igor</b></sub></a><br /><a href="https://github.com/neg4n/next-api-compose/commits?author=neg4n" title="Code">💻</a> <a href="https://github.com/neg4n/next-api-compose/commits?author=neg4n" title="Tests">⚠️</a> <a href="#example-neg4n" title="Examples">💡</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mgrabka"><img src="https://avatars.githubusercontent.com/u/116151164?v=4?s=100" width="100px;" alt="Maksymilian Grabka"/><br /><sub><b>Maksymilian Grabka</b></sub></a><br /><a href="https://github.com/neg4n/next-api-compose/commits?author=mgrabka" title="Tests">⚠️</a> <a href="https://github.com/neg4n/next-api-compose/commits?author=mgrabka" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kacper3123"><img src="https://avatars.githubusercontent.com/u/89151689?v=4?s=100" width="100px;" alt="kacper3123"/><br /><sub><b>kacper3123</b></sub></a><br /><a href="https://github.com/neg4n/next-api-compose/commits?author=kacper3123" title="Documentation">📖</a></td>
     </tr>
   </tbody>

@@ -11,6 +11,28 @@
   "contributorsPerLine": 7,
   "contributors": [
     {
+      "login": "neg4n",
+      "name": "Igor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57688858?v=4",
+      "profile": "https://neg4n.dev/",
+      "contributions": [
+        "code",
+        "test",
+        "example"
+      ]
+    },
+    {
+      "login": "mgrabka",
+      "name": "Maksymilian Grabka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/116151164?v=4",
+      "profile": "https://github.com/mgrabka",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    null,
+    {
       "login": "kacper3123",
       "name": "kacper3123",
       "avatar_url": "https://avatars.githubusercontent.com/u/89151689?v=4",
