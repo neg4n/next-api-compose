@@ -88,6 +88,39 @@ describe("composed route handler's http functionality", () => {
     expect(response.body.foo).toBe('bar')
   })
 
+  it("should handle errors errors thrown by middlewares and return a 500 response with the error's message", async () => {
+    function errorMiddleware() {
+      throw new Error('foo')
+    }
+
+    const { GET } = compose(
+      {
+        GET: [
+          [errorMiddleware],
+          () => {
+            return new MockedResponse({ foo: 'bar' })
+          }
+        ]
+      },
+      {
+        sharedErrorHandler: {
+          handler: (method, error) => {
+            return new MockedResponse(
+              { error: error.message },
+              500
+            ) as unknown as Response
+          }
+        }
+      }
+    )
+
+    const app = createTestServer(GET)
+    const response = await request(app).get('/')
+
+    expect(response.status).toBe(500)
+    expect(response.body.error).toBe('foo')
+  })
+
   it('should wait for asynchronous middlewares to resolve before moving to the next middleware or handler', async () => {
     async function setFooAsyncMiddleware(request) {
       await new Promise((resolve) => setTimeout(resolve, 100))
@@ -151,8 +184,8 @@ describe("composed route handler's code features", () => {
       }
     })
 
-    expect(composedMethods).toHaveProperty("GET")
-    expect(composedMethods).toHaveProperty("POST")
+    expect(composedMethods).toHaveProperty('GET')
+    expect(composedMethods).toHaveProperty('POST')
   })
 })
 
