@@ -135,6 +135,39 @@ describe("composed route handler's http functionality", () => {
     expect(response.body.error).toBe('foo')
   })
 
+
+  it("should abort (halt) further middleware and handler execution with no error scenario when shared error handler is provided", async () => {
+    function haltingMiddleware() {
+      return new Response(JSON.stringify({ foo: 'bar' })) 
+    }
+
+    const { GET } = compose(
+      {
+        GET: [
+          [haltingMiddleware],
+          () => {
+            return new Response(JSON.stringify({ foo: 'bar' }))
+          }
+        ]
+      },
+      {
+        sharedErrorHandler: {
+          handler: (_method, error) => {
+            return new Response(JSON.stringify({ error: error.message }), {
+              status: 500
+            })
+          }
+        }
+      }
+    )
+
+    const app = createTestServer(GET)
+    const response = await request(app).get('/')
+
+    expect(response.status).toBe(200)
+    expect(response.body.foo).toBe('bar')
+  })
+
   it('should correctly execute handler without middleware chain provided', async () => {
     const { GET } = compose({
       GET: (request) => {
@@ -174,7 +207,7 @@ describe("composed route handler's http functionality", () => {
     expect(response.body.foo).toBe('foobar')
   })
 
-  it('should abort further middleware execution and return the response if a middleware returns a Response instance.', async () => {
+  it('should abort (halt) further middleware and handler execution and return the response if a middleware returns a Response instance.', async () => {
     function abortMiddleware(request) {
       request.foo = 'bar'
       return new Response(JSON.stringify({ foo: request.foo }), { status: 418 })
