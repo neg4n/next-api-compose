@@ -18,7 +18,16 @@ type NextApiMethodHandler = (
 
 type ComposeSettings = PartialDeep<{
   sharedErrorHandler: {
+    /**
+     * @param {NextApiRouteMethod} method HTTP method of the composed route handler that failed.
+     * @param {Error} error Error that was thrown by the middleware or the handler.
+     */
     handler: (method: NextApiRouteMethod, error: Error) => Promisable<Response | void>
+    /** 
+     * Whether to include the route handler in the error handled area.
+     *
+     * By default only middlewares are included (being caught by the sharedErrorHandler).
+     */
     includeRouteHandler: boolean
   }
 }>
@@ -46,6 +55,7 @@ type ComposeParameters<
  * Function that allows to define complex API structure in Next.js App router's Route Handlers.
  *
  * @param {ComposeParameters} parameters Middlewares array **(order matters)** or options object with previously mentioned middlewares array as `middlewareChain` property and error handler shared by every middleware in the array as `sharedErrorHandler` property.
+ * @param {ComposeSettings} composeSettings Settings object that allows to configure the compose function.
  * @returns Method handlers with applied middleware.
  */
 export function compose<
