@@ -80,6 +80,55 @@ const { GET } = compose({
 export { GET };
 ```
 
+## Error handling
+
+Handling errors both in middleware and in the main handler is as simple as providing `sharedErrorHandler` to the `compose` function's second parameter _(a.k.a compose settings)_. Main goal of the shared error handler is to provide clear and easy way to e.g. send the error metadata to Sentry or other error tracking service.
+
+By default, shared error handler looks like this:
+
+```ts
+sharedErrorHandler: {
+  handler: undefined;
+  // ^^^^ This is the handler function. By default there is no handler, so the error is being just thrown.
+  includeRouteHandler: false;
+  // ^^^^^^^^^^^^^^^^ This toggles whether the route handler itself should be included in a error handled area.
+  //                  By default only middlewares are being caught by the sharedErrorHandler
+}
+```
+
+... and some usage example:
+
+```ts
+// [...]
+function errorMiddleware() {
+  throw new Error("foo");
+}
+
+const { GET } = compose(
+  {
+    GET: [
+      [errorMiddleware],
+      () => {
+        // Unreachable code due to errorMiddleware throwing an error and halting the chain
+        return new Response(JSON.stringify({ foo: "bar" }));
+      },
+    ],
+  },
+  {
+    sharedErrorHandler: {
+      handler: (_method, error) => {
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+        });
+      },
+    },
+  }
+);
+// [...]
+```
+
+will return `{"error": "foo"}` along with `500` status code instead of throwing an error.
+
 ## Theory and caveats
 
 1. Unfortunately there is no way to dynamically export named ESModules _(or at least I did not find a way)_ so you have to use `export { GET, POST }` syntax instead of something like `export compose(...)` if you're composing GET and POST methods :(
