@@ -1,6 +1,3 @@
-global.Response = class MockedResponse {
-  constructor(body, status) {
-    this.body = body
-    this.status = status
-  }
-}
+const { Response } = require('undici')
+
+global.Response = Response

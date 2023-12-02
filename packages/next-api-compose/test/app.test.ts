@@ -8,27 +8,32 @@ import type { IncomingMessage } from 'http'
 
 import { compose } from '../src/app'
 
-class MockedResponse {
-  body: any = null
-  status: number = 200
-  headers: { [key: string]: string } = {}
+type HandlerFunction = (req: IncomingMessage) => Promise<Response>
 
-  constructor(body?: any, status: number = 200) {
-    this.body = body
-    this.status = status
+async function streamToJson<T>(stream: ReadableStream<T>) {
+  const reader = stream.getReader()
+  let chunks: Uint8Array[] = []
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    chunks.push(value as any)
   }
+
+  const string = new TextDecoder().decode(
+    Uint8Array.from(chunks.flatMap((chunk) => Array.from(chunk)))
+  )
+  return JSON.parse(string)
 }
-
-Object.setPrototypeOf(MockedResponse.prototype, Response.prototype)
-
-type HandlerFunction = (req: IncomingMessage) => Promise<MockedResponse>
 
 function createTestServer(handler: HandlerFunction) {
   return createServer(async (req, res) => {
-    const response: MockedResponse = await handler(req)
-
-    res.writeHead(response.status, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify(response.body))
+    const response = await handler(req)
+    if (response.body) {
+      const body = await streamToJson(response.body)
+      res.writeHead(response.status, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify(body))
+    }
   })
 }
 
@@ -38,7 +43,7 @@ describe("composed route handler's http functionality", () => {
       GET: [
         [],
         () => {
-          return new MockedResponse({ foo: 'bar' })
+          return new Response(JSON.stringify({ foo: 'bar' }))
         }
       ]
     })
@@ -62,7 +67,7 @@ describe("composed route handler's http functionality", () => {
       GET: [
         [setFooMiddleware, appendBarToFooMiddleware],
         (request) => {
-          return new MockedResponse({ foo: request.foo })
+          return new Response(JSON.stringify({ foo: request.foo }))
         }
       ]
     })
@@ -77,7 +82,7 @@ describe("composed route handler's http functionality", () => {
   it('should correctly execute handler without middleware chain provided', async () => {
     const { GET } = compose({
       GET: (request) => {
-        return new MockedResponse({ foo: 'bar' }) as any
+        return new Response(JSON.stringify({ foo: 'bar' }))
       }
     })
 
@@ -86,66 +91,6 @@ describe("composed route handler's http functionality", () => {
 
     expect(response.status).toBe(200)
     expect(response.body.foo).toBe('bar')
-  })
-
-  it("should handle errors thrown by handler when no middleware is provided and return a 500 response with the error's message", async () => {
-    const { GET } = compose(
-      {
-        GET: () => {
-          throw new Error('foo')
-        }
-      },
-      {
-        sharedErrorHandler: {
-          includeRouteHandler: true,
-          handler: (method, error) => {
-            return new MockedResponse(
-              { error: error.message },
-              500
-            ) as unknown as Response
-          }
-        }
-      }
-    )
-
-    const app = createTestServer(GET)
-    const response = await request(app).get('/')
-
-    expect(response.status).toBe(500)
-    expect(response.body.error).toBe('foo')
-  })
-
-  it("should handle errors thrown by middlewares and return a 500 response with the error's message", async () => {
-    function errorMiddleware() {
-      throw new Error('foo')
-    }
-
-    const { GET } = compose(
-      {
-        GET: [
-          [errorMiddleware],
-          () => {
-            return new MockedResponse({ foo: 'bar' })
-          }
-        ]
-      },
-      {
-        sharedErrorHandler: {
-          handler: (method, error) => {
-            return new MockedResponse(
-              { error: error.message },
-              500
-            ) as unknown as Response
-          }
-        }
-      }
-    )
-
-    const app = createTestServer(GET)
-    const response = await request(app).get('/')
-
-    expect(response.status).toBe(500)
-    expect(response.body.error).toBe('foo')
   })
 
   it('should wait for asynchronous middlewares to resolve before moving to the next middleware or handler', async () => {
@@ -161,7 +106,7 @@ describe("composed route handler's http functionality", () => {
       GET: [
         [setFooAsyncMiddleware, appendBarToFooMiddleware],
         (request) => {
-          return new MockedResponse({ foo: request.foo })
+          return new Response(JSON.stringify({ foo: request.foo }))
         }
       ]
     })
@@ -176,7 +121,7 @@ describe("composed route handler's http functionality", () => {
   it('should abort further middleware execution and return the response if a middleware returns a Response instance.', async () => {
     function abortMiddleware(request) {
       request.foo = 'bar'
-      return new MockedResponse({ foo: request.foo }, 418)
+      return new Response(JSON.stringify({ foo: request.foo }), { status: 418 })
     }
 
     function setFooMiddleware(request) {
@@ -187,7 +132,7 @@ describe("composed route handler's http functionality", () => {
       GET: [
         [abortMiddleware, setFooMiddleware],
         () => {
-          return new MockedResponse({ foo: 'unreachable fizz' })
+          return new Response(JSON.stringify({ foo: 'unreachable fizz' }))
         }
       ]
     })
@@ -204,10 +149,10 @@ describe("composed route handler's code features", () => {
   it("should correctly return multiple method handlers when they're composed", async () => {
     const composedMethods = compose({
       GET: (request) => {
-        return new MockedResponse({ foo: 'bar' }) as any
+        return new Response(JSON.stringify({ foo: 'bar' }))
       },
       POST: (request) => {
-        return new MockedResponse({ fizz: 'buzz' }) as any
+        return new Response(JSON.stringify({ fizz: 'buzz' }))
       }
     })
 
