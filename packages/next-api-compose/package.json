@@ -1,6 +1,6 @@
 {
   "name": "next-api-compose",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Compose middleware chain in Next.js API Routes. Supports Pages and App router",
   "author": {
     "name": "Igor Klepacki",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neg4n/next-api-compose"
+    "url": "git+https://github.com/neg4n/next-api-compose.git"
   },
   "keywords": [
     "nextjs",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/neg4n/next-api-compose/#readme",
   "main": "./dist/app.js",
+  "files": ["dist"],
   "exports": {
     ".": "./dist/app.js",
     "./app": "./dist/app.js",
