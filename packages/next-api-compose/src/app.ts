@@ -1,4 +1,4 @@
-import type { Promisable } from 'type-fest'
+import type { Promisable, PartialDeep } from 'type-fest'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextResponse } from 'next/server'
 
@@ -15,6 +15,13 @@ type NextApiRouteMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' |
 type NextApiMethodHandler = (
   request: NextApiRequest
 ) => Promisable<NextApiResponse> | Promisable<Response>
+
+type ComposeSettings = PartialDeep<{
+  sharedErrorHandler: {
+    handler: (method: NextApiRouteMethod, error: Error) => Promisable<Response | void>
+    includeRouteHandler: boolean
+  }
+}>
 
 type ComposeParameters<
   Methods extends NextApiRouteMethod,
@@ -51,7 +58,22 @@ export function compose<
       | Promisable<Response | undefined>
       | Promisable<void | undefined>
   >
->(parameters: ComposeParameters<UsedMethods, MiddlewareChain>) {
+>(
+  parameters: ComposeParameters<UsedMethods, MiddlewareChain>,
+  composeSettings?: ComposeSettings
+) {
+  const defaultComposeSettings = {
+    sharedErrorHandler: {
+      handler: undefined,
+      includeRouteHandler: false
+    }
+  }
+
+  const mergedComposeSettings = {
+    ...defaultComposeSettings,
+    ...composeSettings
+  }
+
   const modified = Object.entries(parameters).map(
     ([method, composeForMethodData]: [
       UsedMethods,
@@ -66,12 +88,50 @@ export function compose<
       [method]: async (request: any) => {
         if (typeof composeForMethodData === 'function') {
           const handler = composeForMethodData
+          if (
+            mergedComposeSettings.sharedErrorHandler.includeRouteHandler &&
+            mergedComposeSettings.sharedErrorHandler.handler != null
+          ) {
+            try {
+              return await handler(request)
+            } catch (error) {
+              const composeSharedErrorHandlerResult =
+                await mergedComposeSettings.sharedErrorHandler.handler(method, error)
+
+              if (
+                composeSharedErrorHandlerResult != null &&
+                composeSharedErrorHandlerResult instanceof Response
+              ) {
+                return composeSharedErrorHandlerResult
+              }
+            }
+          }
+
           return await handler(request)
         }
 
         const [middlewareChain, handler] = composeForMethodData
 
         for (const middleware of middlewareChain) {
+          if (mergedComposeSettings.sharedErrorHandler.handler != null) {
+            try {
+              const abortedMiddleware = await middleware(request)
+
+              if (abortedMiddleware != null && abortedMiddleware instanceof Response)
+                return abortedMiddleware
+            } catch (error) {
+              const composeSharedErrorHandlerResult =
+                await mergedComposeSettings.sharedErrorHandler.handler(method, error)
+
+              if (
+                composeSharedErrorHandlerResult != null &&
+                composeSharedErrorHandlerResult instanceof Response
+              ) {
+                return composeSharedErrorHandlerResult
+              }
+            }
+          }
+
           const abortedMiddleware = await middleware(request)
 
           if (abortedMiddleware != null && abortedMiddleware instanceof Response)

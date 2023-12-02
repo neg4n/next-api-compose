@@ -79,6 +79,62 @@ describe("composed route handler's http functionality", () => {
     expect(response.body.foo).toBe('foobar')
   })
 
+  it("should handle errors thrown by handler when no middleware is provided and return a 500 response with the error's message", async () => {
+    const { GET } = compose(
+      {
+        GET: () => {
+          throw new Error('foo')
+        }
+      },
+      {
+        sharedErrorHandler: {
+          includeRouteHandler: true,
+          handler: (_method, error) => {
+            return new Response(JSON.stringify({ error: error.message }), { status: 500 })
+          }
+        }
+      }
+    )
+
+    const app = createTestServer(GET)
+    const response = await request(app).get('/')
+
+    expect(response.status).toBe(500)
+    expect(response.body.error).toBe('foo')
+  })
+
+  it("should handle errors thrown by middlewares and return a 500 response with the error's message", async () => {
+    function errorMiddleware() {
+      throw new Error('foo')
+    }
+
+    const { GET } = compose(
+      {
+        GET: [
+          [errorMiddleware],
+          () => {
+            return new Response(JSON.stringify({ foo: 'bar' }))
+          }
+        ]
+      },
+      {
+        sharedErrorHandler: {
+          handler: (_method, error) => {
+            return new Response(JSON.stringify({ error: error.message }), {
+              status: 500
+            })
+          }
+        }
+      }
+    )
+
+    const app = createTestServer(GET)
+    const response = await request(app).get('/')
+
+    expect(response.status).toBe(500)
+    expect(response.body.error).toBe('foo')
+  })
+
   it('should correctly execute handler without middleware chain provided', async () => {
     const { GET } = compose({
       GET: (request) => {
